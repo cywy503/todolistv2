@@ -1,4 +1,5 @@
 //jshint esversion:6
+require('dotenv').config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -14,7 +15,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb+srv://admin-chenyu:test123@cluster0.nyslq.mongodb.net/todolistDB?retryWrites=true&w=majority"); //db name
+mongoose.connect(process.env.ADDRESS); //db name
 
 const itemsSchema = {
   name: String
@@ -49,6 +50,7 @@ const List = mongoose.model("List", listSchema);
 
 app.get("/", function(req, res) {
 
+  // find all
   Item.find({}, function(err, foundItems) {
     if (foundItems.length === 0) {
       Item.insertMany(defaultItems, function(err) {
